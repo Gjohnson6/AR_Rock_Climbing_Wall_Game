@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\main.cpp(82): warning C4018: '<': signed/unsigned mismatch
+c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\main.cpp(135): warning C4018: '<': signed/unsigned mismatch
+c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\main.cpp(160): warning C4018: '<': signed/unsigned mismatch
+  FinalProj.vcxproj -> C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe
