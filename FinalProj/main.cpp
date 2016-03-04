@@ -132,17 +132,6 @@ void DisplayFunc()
 	}
 
 	
-	if (currToHit < window.markers.size())
-	{
-		cout << "color" << endl;
-		Scalar colour = thresholdImage.at<uchar>(Point(window.markers[currToHit].getX(), thresholdImage.size().height - window.markers[currToHit].getY()));
-		cout << "color2" << endl;
-		if (colour.val[0] == 255)
-		{
-			window.markers[currToHit].getHit();
-			currToHit++;
-		}
-	}
 
 	//GLReturnedError("Entering Display Func");
 	//glClearColor(51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f);
@@ -157,6 +146,8 @@ void DisplayFunc()
 	glPolygonMode(GL_FRONT_AND_BACK, GL_QUADS);
 	glViewport(0, 0, window.width, window.height);
 	
+	window.DetectHit(thresholdImage);
+	window.DisplayTimer();
 	for (int i = 0; i < window.markers.size(); i ++)
 	{
 		window.markers[i].Draw();
@@ -177,6 +168,9 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	{
 	case 'd':
 		debugMode = !debugMode;
+		break;
+	case '4':
+		window.Reset();
 		break;
 	}
 }

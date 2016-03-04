@@ -21,6 +21,7 @@ public:
 	void getHit();
 	int getX();
 	int getY();
+	void Reset();
 private:
 	int num;
 	int x;

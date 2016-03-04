@@ -92,3 +92,9 @@ int HitMarker::getY()
 {
 	return this->y;
 }
+
+void HitMarker::Reset()
+{
+	this->hit = false;
+	this->dec = false;
+}
