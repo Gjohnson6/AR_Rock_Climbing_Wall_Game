@@ -26,8 +26,8 @@ private:
 	int num;
 	int x;
 	int y;
-	int radius;
-	double hitRadius = 20.0;
+	double radius;
+	double hitRadius = 40.0;
 	bool dec = false;
 	bool hit = false;
 	double r = 1.0, g = 1.0, b = 1.0;

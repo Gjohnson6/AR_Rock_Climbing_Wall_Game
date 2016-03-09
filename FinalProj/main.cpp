@@ -3,13 +3,16 @@
 #include "glm\glm.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
+#include "MainMenu.h"
+#include "CameraCalibration.h"
 
 using namespace std;
 using namespace glm;
 using namespace cv;
 
 Game window;
-VideoCapture capture(0);
+CameraCalibration cameraCal;
+VideoCapture capture(1);
 Mat frame1, frame2;
 Mat grayImage1, grayImage2;
 Mat differenceImage;
@@ -18,25 +21,12 @@ int currMarker;
 int currToHit = 0;
 bool debugMode = false;
 bool mouseHeld = false;
-
 const static int SENSITIVITY_VALUE = 20;
 
+
+MainMenu menu;
+
 const static int BLUR_SIZE = 30;
-
-
-bool GLReturnedError(char * s)
-{
-	bool return_error = false;
-	GLenum glerror;
-
-	while ((glerror = glGetError()) != GL_NO_ERROR)
-	{
-		return_error = true;
-		cerr << s << ": " << gluErrorString(glerror) << endl;
-	}
-
-	return return_error;
-}
 
 void ReshapeFunc(int width, int height)
 {
@@ -50,6 +40,7 @@ void MouseFunc(int button, int state, int x, int y)
 	{
 		if (button == GLUT_LEFT_BUTTON)
 		{
+			cameraCal.addBorderPoint(x, y);
 			bool dragging = false;
 			for (auto mark : window.markers)
 			{
@@ -75,10 +66,13 @@ void MouseFunc(int button, int state, int x, int y)
 		mouseHeld = false;
 	}
 
+	menu.DetectClick(x, window.height - y);
+
 }
 
 void MousePassivefunc(int x, int y)
 {
+	//cout << x << "," << y << endl;
 	for (int i = 0; i < window.markers.size(); i++)
 	{
 		if (window.markers[i].DetectMouse(x, window.height - y))
@@ -96,62 +90,100 @@ void MouseMotionFunc(int x, int y)
 	}
 }
 
-void DisplayFunc()
+void GameDisplayFunc()
 {
-	capture.read(frame1);
-	//convert frame2 to gray scale for frame differencing
-	cv::cvtColor(frame1, grayImage1, COLOR_BGR2GRAY);
-	//copy second frame
-	capture.read(frame2);
-	//convert frame2 to gray scale for frame differencing
-	cv::cvtColor(frame2, grayImage2, COLOR_BGR2GRAY);
-	//perform frame differencing with the sequential images. This will output an "intensity image"
-	//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
-	cv::absdiff(grayImage1, grayImage2, differenceImage);
-	//threshold intensity image at a given sensitivity value
-	cv::threshold(differenceImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
-	if (debugMode == true) {
-		//show the difference image and threshold image
-		cv::imshow("Difference Image", differenceImage);
-		cv::imshow("Threshold Image", thresholdImage);
-		cv::imshow("Normal Image", frame1);
+	//capture.read(frame1);
+	////convert frame2 to gray scale for frame differencing
+	//cv::cvtColor(frame1, grayImage1, COLOR_BGR2GRAY);
+	////copy second frame
+	//capture.read(frame2);
+	////convert frame2 to gray scale for frame differencing
+	//cv::cvtColor(frame2, grayImage2, COLOR_BGR2GRAY);
+	////perform frame differencing with the sequential images. This will output an "intensity image"
+	////do not confuse this with a threshold image, we will need to perform thresholding afterwards.
+	//cv::absdiff(grayImage1, grayImage2, differenceImage);
+	////threshold intensity image at a given sensitivity value
+	//cv::threshold(differenceImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
+	//if (debugMode == true) {
+	//	//show the difference image and threshold image
+	//	cv::imshow("Difference Image", differenceImage);
+	//	cv::imshow("Threshold Image", thresholdImage);
+	//	cv::imshow("Normal Image", frame1);
 
-		//blur the image to get rid of the noise. This will output an intensity image
-		cv::blur(thresholdImage, thresholdImage, cv::Size(BLUR_SIZE, BLUR_SIZE));
-		//threshold again to obtain binary image from blur output
-		cv::threshold(thresholdImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
+	//	//blur the image to get rid of the noise. This will output an intensity image
+	//	cv::blur(thresholdImage, thresholdImage, cv::Size(BLUR_SIZE, BLUR_SIZE));
+	//	//threshold again to obtain binary image from blur output
+	//	cv::threshold(thresholdImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
 
-		//show the threshold image after it's been "blurred"
-		imshow("Final Threshold Image", thresholdImage);
-		
-	}
-	else {
-		//if not in debug mode, destroy the windows so we don't see them anymore
-		cv::destroyWindow("Difference Image");
-		cv::destroyWindow("Threshold Image");
-	}
+	//	//show the threshold image after it's been "blurred"
+	//	imshow("Final Threshold Image", thresholdImage);
+	//	
+	//}
+	//else {
+	//	//if not in debug mode, destroy the windows so we don't see them anymore
+	//	cv::destroyWindow("Difference Image");
+	//	cv::destroyWindow("Threshold Image");
+	//}
 
-	
+	//
 
 	//GLReturnedError("Entering Display Func");
-	//glClearColor(51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f);
+	////glClearColor(51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glMatrixMode(GL_PROJECTION);
+	//glLoadIdentity();
+	//glOrtho(0, window.width, 0, window.height, -1, 1);
+
+	//glMatrixMode(GL_MODELVIEW);
+	//glLoadIdentity();
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glViewport(0, 0, window.width, window.height);
+	//
+	//window.DetectHit(thresholdImage);
+	//window.DisplayTimer();
+	//for (int i = 0; i < window.markers.size(); i ++)
+	//{
+	//	window.markers[i].Draw();
+	//}
+
+	//glutSwapBuffers();
+	
+
+
+
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-
 	glOrtho(0, window.width, 0, window.height, -1, 1);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_QUADS);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glViewport(0, 0, window.width, window.height);
+
+	cameraCal.DisplayFunc();
+	//window.DisplayFunc();
+	glutSwapBuffers();
+}
+
+
+//This will be used for the main menu
+void MenuDisplayFunc()
+{
 	
-	window.DetectHit(thresholdImage);
-	window.DisplayTimer();
-	for (int i = 0; i < window.markers.size(); i ++)
-	{
-		window.markers[i].Draw();
-	}
+	//glClearColor(51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0, window.width, 0, window.height, -1, 1);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glViewport(0, 0, window.width, window.height);
+
+	menu.DisplayFunc();
 
 	glutSwapBuffers();
 }
@@ -168,6 +200,7 @@ void KeyboardFunc(unsigned char c, int x, int y)
 	{
 	case 'd':
 		debugMode = !debugMode;
+		window.debugMode = debugMode;
 		break;
 	case '4':
 		window.Reset();
@@ -181,13 +214,16 @@ int main(int argc, char * argv[])
 	Game window;
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, window.width);
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, window.height);
-	window.DisplayFunc = DisplayFunc;
+
+
+	//window.DisplayFunc = GameDisplayFunc;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(window.width, window.height);
 	window.handle = glutCreateWindow("Name");
 	glutReshapeFunc(ReshapeFunc);
-	glutDisplayFunc(window.DisplayFunc);
+	glutDisplayFunc(GameDisplayFunc);
+	//glutDisplayFunc(MenuDisplayFunc);
 	glutMouseFunc(MouseFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutTimerFunc(1000 / 144, TimerFunc, 1000 / 144);
