@@ -1,27 +1,32 @@
 #pragma once
-#include "Game.h"
+#include "opencv2/core/core.hpp"
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include "opencv2\calib3d.hpp"
+#include "GL\glew.h"
+#include "GL\freeglut.h"
+#include "glm\glm.hpp"
+#include <vector>
 
-class CameraCalibration : public GameState
+using namespace std;
+using namespace cv;
+
+static class CameraCalibration
 {
 public:
 	CameraCalibration();
 	~CameraCalibration();
 
-
 	void DisplayFunc();
-
+	void MouseFunc(int&, int&, int&, int&);
+	void KeyboardFunc(unsigned char&, int&, int&);
+	void SpecialFunc(int key, int x, int y);
 	void addBorderPoint(int x, int y);
-
 private:
 
 	cv::Mat TransformImage();
-	VideoCapture capture;
-	Mat frame1, frame2;
-	Mat grayImage1, grayImage2;
-	Mat differenceImage;
-	Mat thresholdImage;
-	const static int SENSITIVITY_VALUE = 20;
-	const static int BLUR_SIZE = 30;
+	void ResetTransform();
+	cv::Mat frame1;
 
 	vector<cv::Point> borderPoints;
 };

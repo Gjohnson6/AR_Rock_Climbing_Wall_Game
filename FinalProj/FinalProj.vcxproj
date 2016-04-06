@@ -152,6 +152,7 @@
     <ClCompile Include="ButtonAction.cpp" />
     <ClCompile Include="CameraCalibration.cpp" />
     <ClCompile Include="ExitButton.cpp" />
+    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HitMarker.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="ButtonAction.h" />
     <ClInclude Include="CameraCalibration.h" />
     <ClInclude Include="ExitButton.h" />
+    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HitMarker.h" />
     <ClInclude Include="Game.h" />

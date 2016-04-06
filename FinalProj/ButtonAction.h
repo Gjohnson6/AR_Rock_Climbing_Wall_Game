@@ -1,5 +1,4 @@
 #pragma once
-#include "GL\freeglut.h"
 #include <iostream>
 
 using namespace std;
@@ -13,7 +12,6 @@ public:/*
 	static void Exit()
 	{
 		cout << "Exit" << endl;
-		glutLeaveMainLoop();
 	}
 };
 

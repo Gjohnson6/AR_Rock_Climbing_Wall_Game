@@ -1,7 +1,5 @@
 #include "HitMarker.h"
 
-
-
 HitMarker::HitMarker(int num, int x, int y)
 {
 	this->num = num;
@@ -9,7 +7,6 @@ HitMarker::HitMarker(int num, int x, int y)
 	this->y = y;
 	this->radius = 20;
 }
-
 
 HitMarker::~HitMarker()
 {
@@ -97,4 +94,5 @@ void HitMarker::Reset()
 {
 	this->hit = false;
 	this->dec = false;
+	this->radius = 20;
 }

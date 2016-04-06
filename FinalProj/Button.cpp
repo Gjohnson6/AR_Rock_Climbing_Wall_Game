@@ -4,12 +4,12 @@ Button::~Button()
 {
 }
 
-bool Button::DetectClick(int x, int y)
+int Button::DetectClick(int x, int y)
 {
-	bool retVal = false;
+	int retVal = -1;
 	if (x > left && x < right && y > bottom && y < top)
 	{
-		retVal = true;
+		retVal = menuNum;
 	}	
 	return retVal;
 }

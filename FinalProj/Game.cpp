@@ -1,18 +1,10 @@
 #include "Game.h"
-
-Game::Game(int width, int height)
+#include "GameState.h"
+Game::Game()
 {
-	this->width = width;
-	this->height = height;
-	capture = VideoCapture(1);
 }
-
 
 Game::~Game()
-{
-}
-
-void Game::init()
 {
 }
 
@@ -25,7 +17,6 @@ int Game::AddMarker(int x, int y)
 		this->markers.push_back(mark);
 		retVal = mark.getNum() - 1;
 	}
-
 	return retVal;
 }
 
@@ -82,7 +73,7 @@ void Game::DisplayTimer()
 	glScaled(.2, .2, .2);
 
 	stringstream strTime;
-	strTime << setprecision(2) << to_string((float)currTime / CLOCKS_PER_SEC);
+	strTime << setprecision(2) << to_string((float)currTime / CLOCKS_PER_SEC) << "   " << markers.size();
 	//string strTime = to_string((float)currTime / CLOCKS_PER_SEC);
 	//glutStrokeString(GLUT_ _MONO_ROMAN, (const unsigned char *)strTime.str().c_str());
 	glRasterPos2i(4, 4);
@@ -110,145 +101,137 @@ void Game::DeleteMarker(int x, int y)
 
 void Game::DisplayFunc()
 {
-		capture.read(frame1);
-		//convert frame2 to gray scale for frame differencing
-		cv::cvtColor(frame1, grayImage1, COLOR_BGR2GRAY);		
-		
+	if(countNonZero(prevGray) < 1)
+	{
+		GameState::GetInstance()->getCap().read(currFrame);
+		cv::cvtColor(currFrame, currGray, COLOR_BGR2GRAY);
+	}
 
-
-		//GaussianBlur(grayImage1, grayImage1, Size(9, 9), 2, 2);
-
-		/*
-		vector<Vec3f> circles;
-		cv::HoughCircles(grayImage1, circles, CV_HOUGH_GRADIENT, 1, grayImage1.rows / 8, 200, 50, 0, 0);
-
-
-		Mat circlesmat;
-		for (size_t i = 0; i < circles.size(); i++)
-		{
-			cout << "Circle detected" << endl;
-			Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-			int radius = cvRound(circles[i][2]);
-
-			circle(frame1, center, 3, Scalar(0, 255, 0), -1, 8, 0);
-
-			circle(frame1, center, radius, Scalar(0, 0, 255), 3, 8, 0);
-		}
-
-		if (circles.size() > 0)
-		{
-			//namedWindow("Hough Circle Transform Demo", CV_WINDOW_AUTOSIZE);
-			cv::imshow("Circles", frame1);
-		}
-
-
-		cv::HoughCircles(grayImage1, circles, CV_HOUGH_GRADIENT, 1, 30, 100, 45, 0, 0);
-		
-		for (size_t i = 0; i < circles.size(); i++)
-		{
-			cout << "Circle detected" << endl;
-			Point center(cvRound(circles[i][0]), cvRound(circles[i][1]));
-			int radius = cvRound(circles[i][2]);
-
-			circle(frame1, center, 3, Scalar(0, 255, 0), -1, 8, 0);
-
-			circle(frame1, center, radius, Scalar(0, 0, 255), 3, 8, 0);
-		}
-
-		if (circles.size() > 0)
-		{
-			//namedWindow("Hough Circle Transform Demo 2", CV_WINDOW_AUTOSIZE);
-			cv::imshow("Circles 2", frame1);
-		}
-		*/
-		bool wasFound;
-
-		std::vector<std::vector<cv::Point2f> > imagePoints(1);
-		cv::Size boardSize(7, 7);
-		//copy second frame
-		capture.read(frame2);
-		//convert frame2 to gray scale for frame differencing
-		cv::cvtColor(frame2, grayImage2, COLOR_BGR2GRAY);
-		//perform frame differencing with the sequential images. This will output an "intensity image"
-		//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
-		cv::absdiff(grayImage1, grayImage2, differenceImage);
-		//threshold intensity image at a given sensitivity value
-		cv::threshold(differenceImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
-		
-		
-		
-		
-		
-	//if (!calibrated)
-	//{
-	//	if (flip)
-	//		glColor3d(1, 1, 1);
-	//	else
-	//		glColor3d(0, 0, 0);
-	//	flip = !flip;
-	//	glBegin(GL_LINES);
-
-	//	for (int i = 0; i < width; i++)
-	//	{
-	//		if (i % 72 == 0)
-	//		{
-	//			glVertex2i(i, 0);
-	//			glVertex2i(i, height);
-	//		}
-	//	}
-
-	//	for (int i = 0; i < 1280; i++)
-	//	{
-	//		if (i % 128 == 0)
-	//		{
-	//			glVertex2i(0, i);
-	//			glVertex2i(width, i);
-	//		}
-	//	}
-
-	//	glEnd();
-	//}
-
-//	{
-
-
-		
-		
-
-
-
-		GLReturnedError("Entering Display Func");
-		//glClearColor(51 / 255.0f, 51 / 255.0f, 51 / 255.0f, 1.0f);
-
-		DetectHit(thresholdImage);
-		DisplayTimer();
-		for (int i = 0; i < markers.size(); i++)
-		{
-			markers[i].Draw();
-		}
-		
+	prevGray = currGray.clone();
+	GameState::GetInstance()->getCap().read(currFrame);
 	
+	cv::warpPerspective(currFrame, currFrame, GameState::GetInstance()->getTransform(), currFrame.size(), INTER_LINEAR, BORDER_CONSTANT);
+	//convert frame2 to gray scale for frame differencing
+	cv::cvtColor(currFrame, currGray, COLOR_BGR2GRAY);
 
-//	}	
+	//perform frame differencing with the sequential images. This will output an "intensity image"
+	//do not confuse this with a threshold image, we will need to perform thresholding afterwards.
+	
+	cv::absdiff(currGray, prevGray, differenceImage);
+	cv::blur(thresholdImage, thresholdImage, cv::Size(BLUR_SIZE, BLUR_SIZE));
+	//threshold intensity image at a given sensitivity value
+	cv::threshold(differenceImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
+
+	//use blur() to smooth the image, remove possible noise and
+	//increase the size of the object we are trying to track. (Much like dilate and erode)
+
+	//threshold again to obtain binary image from blur output
+	//cv::threshold(thresholdImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
+
 	if (debugMode == true) {
-			//show the difference image and threshold image
-			cv::imshow("Difference Image", differenceImage);
-			cv::imshow("Threshold Image", thresholdImage);
-			cv::imshow("Normal Image", frame1);
-			cv::imshow("Gray image 1", grayImage1);
-			
-			//blur the image to get rid of the noise. This will output an intensity image
-			cv::blur(thresholdImage, thresholdImage, cv::Size(BLUR_SIZE, BLUR_SIZE));
-			//threshold again to obtain binary image from blur output
-			cv::threshold(thresholdImage, thresholdImage, SENSITIVITY_VALUE, 255, THRESH_BINARY);
+		//show the difference image and threshold image
+		//cv::imshow("Difference Image", differenceImage);
+		//cv::imshow("Threshold Image", thresholdImage);
+		//cv::imshow("Gray image 1", currGray);
+		//cv::imshow("Prev", prevGray); 
+		glRasterPos2i(0, 0);
+		Mat image;
 
-			//show the threshold image after it's been "blurred"
-			imshow("Final Threshold Image", thresholdImage);
+		if (thresh)
+		{
+			cv::flip(thresholdImage, image, 0);
+			glDrawPixels(image.size().width, image.size().height, GL_LUMINANCE, GL_UNSIGNED_BYTE, image.ptr());
+		}
+		else if (diff)
+		{
+			cv::flip(differenceImage, image, 0);
+			glDrawPixels(image.size().width, image.size().height, GL_LUMINANCE, GL_UNSIGNED_BYTE, image.ptr());
+		}
+		else 
+		{
+			cv::flip(currFrame, image, 0);
+			glDrawPixels(image.size().width, image.size().height, GL_BGR_EXT, GL_UNSIGNED_BYTE, image.ptr());
+		}
 
+	}
+	else {
+		//if not in debug mode, destroy the windows so we don't see them anymore
+		cv::destroyWindow("Difference Image");
+		cv::destroyWindow("Threshold Image");
+	}
+
+	//Check if the current point has been hit
+	DetectHit(thresholdImage);
+
+	//Draw them arkers, this is done after the debugMode block so that the camera's view is displayed behind the markers.
+	for (int i = 0; i < markers.size(); i++)
+	{
+		markers[i].Draw();
+	}
+
+	DisplayTimer();
+}
+
+void Game::MouseFunc(int& button, int& state, int& x, int& y)
+{
+	if (state == GLUT_DOWN)
+	{
+		if (button == GLUT_LEFT_BUTTON)
+		{
+			bool dragging = false;
+			for (auto mark : markers)
+			{
+				if (mark.DetectMouse(x, GameState::GetInstance()->getHeight() - y))
+				{
+					currMarker = mark.getNum() - 1;
+					dragging = true;
+				}
+			}
+
+			if (!dragging)
+			{
+				currMarker = AddMarker(x, GameState::GetInstance()->getHeight() - y);
+			}
+
+			mouseHeld = true;
 		}
-		else {
-			//if not in debug mode, destroy the windows so we don't see them anymore
-			cv::destroyWindow("Difference Image");
-			cv::destroyWindow("Threshold Image");
+		else if (button == GLUT_RIGHT_BUTTON)
+		{
+			DeleteMarker(x, GameState::GetInstance()->getHeight() - y);
 		}
+	}
+	else if (state == GLUT_UP)
+	{
+		mouseHeld = false;
+	}
+}
+
+void Game::MouseMotionFunc(int& x, int& y)
+{
+	if (mouseHeld && currMarker >= 0)
+	{
+		markers[currMarker].move(x, GameState::GetInstance()->getHeight() - y);
+	}
+}
+
+void Game::KeyboardFunc(unsigned char & c, int& x, int& y)
+{
+	switch (c)
+	{
+	case('d'):
+		debugMode = !debugMode;
+		break;
+	case('r') :
+		Reset();
+		break;
+	case('t') :
+		thresh = !thresh;
+		break;
+	case('f') :
+		diff = !diff;
+		break;
+	case(27) :
+		GameState::GetInstance()->getGMenu()->setState(GameMenu::MENU);
+		break;
+	}
 }

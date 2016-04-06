@@ -1,4 +1,4 @@
-﻿  main.cpp
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\buttonaction.h(18): warning C4091: 'static ': ignored on left of 'ButtonActions' when no variable is declared
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\main.cpp(76): warning C4018: '<': signed/unsigned mismatch
-  FinalProj.vcxproj -> C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe
+﻿  GameState.cpp
+c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\buttonaction.h(16): warning C4091: 'static ': ignored on left of 'ButtonActions' when no variable is declared
+c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\cameracalibration.h(32): warning C4091: 'static ': ignored on left of 'CameraCalibration' when no variable is declared
+  FinalProj.vcxproj -> C:\Users\Grant\documents\visual studio 2015\Projects\FinalProj\Debug\FinalProj.exe
