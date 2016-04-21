@@ -1,4 +1,5 @@
 #include "HitMarker.h"
+#include "GameState.h"
 
 HitMarker::HitMarker(int num, int x, int y)
 {
@@ -34,9 +35,10 @@ void HitMarker::Draw()
 		glColor3d(0., 1., 0.);
 		if (this->radius < 60 && !dec)
 		{
-			this->radius += 2;
+			this->radius += 2 * GameState::GetInstance()->getScale();
 			if (this->radius >= 60)
 			{
+				this->radius = 60;
 				dec = true;
 			}
 		}
@@ -44,8 +46,12 @@ void HitMarker::Draw()
 		{
 			if (this->radius > 40)
 			{
-				cout << "Lowering radius" << this->radius << endl;
-				this->radius -= 2;
+				this->radius -= 2 * GameState::GetInstance()->getScale();
+			}
+			
+			if(this->radius < 40)
+			{
+				this->radius = 40;
 			}
 			gluDisk(quadric, this->radius, 60.0, 50.0, 3.0);
 		}

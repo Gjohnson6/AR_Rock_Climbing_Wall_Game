@@ -24,7 +24,7 @@ public:
 	void addBorderPoint(int x, int y);
 private:
 
-	cv::Mat TransformImage();
+	void TransformImage();
 	void ResetTransform();
 	cv::Mat frame1;
 

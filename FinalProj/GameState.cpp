@@ -2,10 +2,12 @@
 
 void GameState::DisplayFunc()
 {
+	prevFrame = currFrame;
+	currFrame = clock();
 	switch (currState)
 	{
 	case(MENU) :
-		mMenu.DisplayFunc();
+		mMenu->DisplayFunc();
 		break;
 	case(GAME) :
 		gMenu->DisplayFunc();
@@ -24,7 +26,7 @@ void GameState::MouseFunc(int & button, int & state, int & x, int & y)
 	switch (currState)
 	{
 	case(MENU) :
-		mMenu.MouseFunc(button, state, x, y);
+		mMenu->MouseFunc(button, state, x, y);
 		break;
 	case(GAME) :
 		gMenu->MouseFunc(button, state, x, y);
@@ -84,14 +86,45 @@ bool GameState::GLReturnedError(char * s)
 	return return_error;
 }
 
+Mat GameState::readAndResize()
+{
+	Mat baseFrame;
+	Mat resizeMat = Mat(winHeight, winWidth, 16);
+	cap.read(baseFrame);
+	resize(baseFrame, baseFrame, resizeMat.size());//Resize the captured frame so it fits 1:1 with the screen
+
+	//warpPerspective(baseFrame, baseFrame, transform, baseFrame.size(), INTER_LINEAR, BORDER_CONSTANT);
+	return baseFrame;
+}
+
 int GameState::getHeight()
 {
 	return winHeight;
 }
 
+void GameState::setHeight(int height)
+{
+	winHeight = height;
+}
+
 int GameState::getWidth()
 {
 	return winWidth;
+}
+
+int GameState::getCamHeight()
+{
+	return camHeight;
+}
+
+int GameState::getCamWidth()
+{
+	return camWidth;
+}
+
+void GameState::setWidth(int width)
+{
+	winWidth = width;
 }
 
 void GameState::setState(int state)
@@ -104,14 +137,72 @@ VideoCapture GameState::getCap()
 	return cap;
 }
 
-void GameState::setTransform(Mat t)
+void GameState::setPointTransform(Mat t)
 {
-	transform = t;
+	pointTransform = t;
 }
 
-Mat GameState::getTransform()
+void GameState::setCamTransform(Mat t)
 {
-	return transform;
+	camTransform = t;
+}
+
+//Essentially a constructor. Moving it out of the constructor though allows 
+//other classes (Like Menu, for instance) to use GameState functions,
+//such as getHeight/Width.
+void GameState::init()
+{
+	prevFrame = clock();
+	winHeight = glutGet(GLUT_SCREEN_HEIGHT);
+	winWidth = glutGet(GLUT_SCREEN_WIDTH);
+
+	cap = VideoCapture(1);
+	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920);
+	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1080);
+	camWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+	camHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+
+	Point2f dst_vertices[4];
+	dst_vertices[0] = Point(0, 0);
+	dst_vertices[1] = Point(winWidth, 0);
+	dst_vertices[2] = Point(winHeight, winWidth);
+	dst_vertices[3] = Point(0, winWidth);
+
+
+	camTransform = getPerspectiveTransform(dst_vertices, dst_vertices);
+	pointTransform = getPerspectiveTransform(dst_vertices, dst_vertices);
+	gMenu = new GameMenu();
+	mMenu = new MainMenu();
+}
+
+Mat GameState::getPointTransform()
+{
+	return pointTransform;
+}
+
+Mat GameState::getCamTransform()
+{
+	return camTransform;
+}
+
+void GameState::setHandle(GLuint handle)
+{
+	winHandle = handle;
+}
+
+float GameState::getScale()
+{
+	return (currFrame - prevFrame) / 60.f;
+}
+
+void GameState::setBottomLeft(Point2f p)
+{
+	bottomLeft = p;
+}
+
+Point2f GameState::getBottomLeft()
+{
+	return bottomLeft;
 }
 
 Game GameState::getGame()
@@ -126,16 +217,7 @@ GameMenu* GameState::getGMenu()
 
 GameState::GameState()
 {
-	cap = VideoCapture(1);
-	Point2f dst_vertices[4];
-	dst_vertices[0] = Point(0, 0);
-	dst_vertices[1] = Point(winWidth, 0);
-	dst_vertices[2] = Point(winHeight, winWidth);
-	dst_vertices[3] = Point(0, winWidth);
 
-	transform = getPerspectiveTransform(dst_vertices, dst_vertices);
-
-	gMenu = new GameMenu();
 }
 
 

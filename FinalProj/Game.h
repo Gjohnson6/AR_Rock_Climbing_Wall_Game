@@ -5,6 +5,7 @@
 #include "opencv2\calib3d.hpp"
 
 #include "HitMarker.h"
+#include "Map.h"
 #include <vector>
 #include <sys/timeb.h>
 #include <time.h>
@@ -30,19 +31,35 @@ public:
 	void KeyboardFunc(unsigned char & c, int & x, int & y);
 	//Displays the timer in the bottom left corner. When the map is finished, it turns green.
 	void DisplayTimer();
+	void SetMap(Map map);
+	void Clear();
 
 	GLuint handle;
 	int width;
 	int height;
 	vector<HitMarker> markers;
+
+
 	bool debugMode = false;
 private:
+
+	//These are the positions of the markers in the camera's view. They don't effect what the client sees
+	//but they are important because the alternative is transforming the camera's view every single frame
+	//Transformations take a really long time (50ms+), which is unnaceptable for an interactive game.
+	//By doing the transformations once at the beginning the limiting factor becomes the speed of the camera
+	//as these points can be compared directly the camera without transformations (after differencing, and thresholding)
+	//Basically, they're really important
+	vector<Point2f> markersRealPos;
+
+	void convertMarkersToRealPos();
+
 	int currToHit = 0;//Index of the current hittable hitmarker in the vector. This is used to make sure markers can't be hit out of order
 	int currMarker = -1;//Used for moving markers
 	clock_t startTime = 0;//The time the fist marker is hit
 	clock_t currTime = 0;//The current time
 	bool finished = false;//Whether the last marker has been hit
 	bool mouseHeld = false;
+
 
 	Mat currFrame;
 	Mat currGray, prevGray;
@@ -52,8 +69,20 @@ private:
 	const static int BLUR_SIZE = 30;
 
 	bool calibrated = false;
+
+	enum debugState
+	{
+		NORM,
+		THRESH,
+		DIFF,
+		POINT
+	};
+	unsigned short debugState = NORM;
 	bool flip = false;
 	bool thresh = false;
 	bool diff = false;
+	bool edit = true;//Whether or not the map is editable
+
+	bool gameStarted = false;
 };
 

@@ -5,7 +5,7 @@ using namespace std;
 using namespace glm;
 using namespace cv;
 
-GameState* GameState::instance;
+GameState* GameState::instance = 0;
 //Game window;
 int currMarker;
 int currToHit = 0;
@@ -106,17 +106,15 @@ void SpecialFunc(int key, int x, int y)
 int main(int argc, char * argv[])
 {
 	glutInit(&argc, argv);
-	Game window;
-	VideoCapture cap = GameState::GetInstance()->getCap();
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, GameState::GetInstance()->getWidth());
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, GameState::GetInstance()->getHeight());
+	GameState::GetInstance()->init();
 
+	//This is a fullscreen application, so we set the width and height to the size of the screen.
 
 	//window.DisplayFunc = GameDisplayFunc;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(GameState::GetInstance()->getWidth(), GameState::GetInstance()->getHeight());
-	window.handle = glutCreateWindow("Name");
+	GameState::GetInstance()->setHandle(glutCreateWindow("Name"));
 	glutReshapeFunc(ReshapeFunc);
 	glutDisplayFunc(GameDisplayFunc);
 	//glutDisplayFunc(MenuDisplayFunc);
@@ -124,5 +122,6 @@ int main(int argc, char * argv[])
 	glutKeyboardFunc(KeyboardFunc);
 	glutTimerFunc(1000 / 30, TimerFunc, 1000 / 30 );
 	glutMotionFunc(MouseMotionFunc);
+	glutFullScreen();
 	glutMainLoop();
 }

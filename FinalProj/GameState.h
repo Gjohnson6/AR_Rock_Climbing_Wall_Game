@@ -29,13 +29,24 @@ public:
 		return instance;
 	}
 
+	Mat readAndResize();
 	int getHeight();
 	int getWidth();
+	int getCamHeight();
+	int getCamWidth();
+	void setHeight(int height);
+	void setWidth(int width);
 	void setState(int state);
 	VideoCapture getCap();
-	void setTransform(Mat t);
-	Mat getTransform();
-
+	void setPointTransform(Mat t);
+	void setCamTransform(Mat t);
+	void init();
+	Mat getPointTransform();
+	Mat getCamTransform();
+	void setHandle(GLuint handle);
+	float getScale();
+	void setBottomLeft(Point2f p);
+	Point2f getBottomLeft();
 	Game getGame();
 	GameMenu* getGMenu();
 
@@ -52,16 +63,25 @@ private:
 	~GameState();
 	int winHeight = 1080;
 	int winWidth = 1920;
+	int camHeight;
+	int camWidth;
 	int currState = MENU;
+	Point2f bottomLeft = (0, 0);
+	clock_t prevFrame;
+	clock_t currFrame;
+	
 	static GameState* instance;
 
 	CameraCalibration calib;
 	Game game;
-	MainMenu mMenu;
-	GameMenu* gMenu;
+	MainMenu* mMenu = nullptr;
+	GameMenu* gMenu = nullptr;
 
 	VideoCapture cap;
-	Mat transform;
+	Mat pointTransform;
+	Mat camTransform;
+
+	GLuint winHandle;
 
 };
 
