@@ -11,7 +11,7 @@
 using namespace std;
 using namespace cv;
 
-static class CameraCalibration
+class CameraCalibration
 {
 public:
 	CameraCalibration();

@@ -15,7 +15,7 @@ void CameraCalibration::DisplayFunc()
 	//Get the warped and resized frame from the camera
 	Mat frame = GameState::GetInstance()->readAndResize();
 
-	//warpPerspective(frame, frame, GameState::GetInstance()->getCamTransform(), frame.size(), INTER_LINEAR, BORDER_CONSTANT);
+	warpPerspective(frame, frame, GameState::GetInstance()->getCamTransform(), frame.size(), INTER_LINEAR, BORDER_CONSTANT);
 
 	frame1 = frame;
 

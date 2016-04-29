@@ -149,12 +149,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
-    <ClCompile Include="ButtonAction.cpp" />
     <ClCompile Include="CameraCalibration.cpp" />
     <ClCompile Include="ExitButton.cpp" />
     <ClCompile Include="GameMenu.cpp" />
+    <ClCompile Include="GamePlayMenu.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HitMarker.cpp" />
+    <ClCompile Include="InGameMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainMenu.cpp" />
@@ -163,13 +164,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
-    <ClInclude Include="ButtonAction.h" />
     <ClInclude Include="CameraCalibration.h" />
     <ClInclude Include="ExitButton.h" />
     <ClInclude Include="GameMenu.h" />
+    <ClInclude Include="GamePlayMenu.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HitMarker.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InGameMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />

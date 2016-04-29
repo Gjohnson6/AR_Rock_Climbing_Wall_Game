@@ -1,10 +1,6 @@
-﻿  CameraCalibration.cpp
+﻿  HitMarker.cpp
 c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
 c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\cameracalibration.h(32): warning C4091: 'static ': ignored on left of 'CameraCalibration' when no variable is declared
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\buttonaction.h(16): warning C4091: 'static ': ignored on left of 'ButtonActions' when no variable is declared
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\gamestate.h(69): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\cameracalibration.cpp(90): warning C4305: 'argument': truncation from 'int' to 'bool'
   FinalProj.vcxproj -> C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe

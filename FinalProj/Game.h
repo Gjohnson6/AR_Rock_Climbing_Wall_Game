@@ -10,11 +10,12 @@
 #include <sys/timeb.h>
 #include <time.h>
 #include <iomanip>
+#include "GamePlayMenu.h"
 
 using namespace std;
 using namespace cv;
 
-class Game
+class Game : GamePlayMenu
 {
 public:
 	Game();
@@ -32,7 +33,6 @@ public:
 	//Displays the timer in the bottom left corner. When the map is finished, it turns green.
 	void DisplayTimer();
 	void SetMap(Map map);
-	void Clear();
 
 	GLuint handle;
 	int width;
@@ -52,6 +52,10 @@ private:
 	vector<Point2f> markersRealPos;
 
 	void convertMarkersToRealPos();
+	void Return();
+	void Clear();
+	void Ready();
+	void Unready();
 
 	int currToHit = 0;//Index of the current hittable hitmarker in the vector. This is used to make sure markers can't be hit out of order
 	int currMarker = -1;//Used for moving markers
@@ -76,6 +80,17 @@ private:
 		THRESH,
 		DIFF,
 		POINT
+	};
+
+	enum buttonNums
+	{
+		READY,
+		UNREADY,
+		RESTART,
+		CLEAR,
+		LOAD,
+		SAVE,
+		RETURN
 	};
 	unsigned short debugState = NORM;
 	bool flip = false;

@@ -32,7 +32,7 @@ void Button::Draw()
 	glVertex2i(left, bottom);
 	
 	glEnd();
-	glTranslatef(left, bottom + 4, 0);
+	glTranslatef((float) left, (float) bottom + 4.f, 0.f);
 	glScaled(.2, .2, .2);
 
 	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)name.c_str());

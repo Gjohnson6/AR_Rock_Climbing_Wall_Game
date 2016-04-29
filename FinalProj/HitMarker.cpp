@@ -25,11 +25,11 @@ void HitMarker::Draw()
 	glColor3d(1., 1., 1.);
 	
 	glPushMatrix();
-	glTranslatef(this->x, this->y, 0.f);
+	glTranslatef((float) this->x, (float) this->y, 0.f);
 
 	GLUquadric* quadric;
 	quadric = gluNewQuadric();
-	gluDisk(quadric, 0, this->radius, 50.0, 3.0);
+	gluDisk(quadric, 0, this->radius, 50, 3);
 	if (hit)//hit animation
 	{
 		glColor3d(0., 1., 0.);
@@ -53,7 +53,7 @@ void HitMarker::Draw()
 			{
 				this->radius = 40;
 			}
-			gluDisk(quadric, this->radius, 60.0, 50.0, 3.0);
+			gluDisk(quadric, this->radius, 60.0, 50, 3);
 		}
 	}
 	glTranslatef(-10., -10., -1.);

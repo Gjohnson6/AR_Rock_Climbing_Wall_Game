@@ -47,8 +47,8 @@ public:
 	float getScale();
 	void setBottomLeft(Point2f p);
 	Point2f getBottomLeft();
-	Game getGame();
-	GameMenu* getGMenu();
+	//Game getGame();
+	//GameMenu* getGMenu();
 
 	enum GAMESTATE
 	{
@@ -66,16 +66,16 @@ private:
 	int camHeight;
 	int camWidth;
 	int currState = MENU;
-	Point2f bottomLeft = (0, 0);
+	Point2f bottomLeft = (0.f, 0.f);
 	clock_t prevFrame;
 	clock_t currFrame;
 	
 	static GameState* instance;
 
 	CameraCalibration calib;
-	Game game;
+	Game* game = nullptr;
 	MainMenu* mMenu = nullptr;
-	GameMenu* gMenu = nullptr;
+	//GameMenu* gMenu = nullptr;
 
 	VideoCapture cap;
 	Mat pointTransform;

@@ -2,6 +2,12 @@
 #include "GameState.h"
 Game::Game()
 {
+	addButton(RETURN, "Return");
+	addButton(LOAD, "Load");
+	addButton(SAVE, "Save");
+	addButton(CLEAR, "Clear");
+	addButton(RESTART, "Restart");
+	addButton(READY, "Ready");
 }
 
 Game::~Game()
@@ -89,9 +95,28 @@ void Game::SetMap(Map map)
 
 void Game::Clear()
 {
+	Unready();
 	markers.clear();
 	currTime = 0;
 	startTime = 0;
+}
+
+void Game::Ready()
+{
+	convertMarkersToRealPos();
+	gameStarted = true;
+	edit = false;
+	buttons.erase(buttons.end() - 1);
+	addButton(UNREADY, "Unready");
+}
+
+void Game::Unready()
+{
+	Reset();
+	edit = true;
+	gameStarted = false;
+	buttons.erase(buttons.end() - 1);
+	addButton(READY, "Ready");
 }
 
 //This converts the onscreen positions of the markers to the position they will be in the camera's eye
@@ -138,6 +163,11 @@ void Game::convertMarkersToRealPos()
 		cout << point.x << "," << point.y << endl;
 	}
 	//cv::transform(markersRealPos, markersRealPos, GameState::GetInstance()->getTransform());
+}
+
+void Game::Return()
+{
+	GameState::GetInstance()->setState(GameState::MENU);
 }
 
 //When deleting markers, change the markers' numbers to correspond
@@ -230,17 +260,24 @@ void Game::DisplayFunc()
 	{
 		markers[i].Draw();
 	}
-	
+
+	for (auto button : buttons)
+	{
+		button.Draw();
+	}
+
 	DisplayTimer();
 }
 
 void Game::MouseFunc(int& button, int& state, int& x, int& y)
 {
-	if (edit)
+	if (state == GLUT_DOWN)
 	{
-		if (state == GLUT_DOWN)
+		if (button == GLUT_LEFT_BUTTON)
 		{
-			if (button == GLUT_LEFT_BUTTON)
+			//If the mouse is in the marker area check if we're trying to create a new marker or move a marker
+			//Also, check if the map is allowed to be edited
+			if (x > GameState::GetInstance()->getWidth() / 4 && edit)
 			{
 				bool dragging = false;
 				for (auto mark : markers)
@@ -252,24 +289,55 @@ void Game::MouseFunc(int& button, int& state, int& x, int& y)
 					}
 				}
 
-				if (!dragging)
+				if (!dragging && x > GameState::GetInstance()->getWidth() / 4)
 				{
 					currMarker = AddMarker(x, GameState::GetInstance()->getHeight() - y);
 				}
 
 				mouseHeld = true;
 			}
-			else if (button == GLUT_RIGHT_BUTTON)
+			//Otherwise it's in the menu area, so we need to check if it's clicking on any of the buttons
+			else
 			{
-				DeleteMarker(x, GameState::GetInstance()->getHeight() - y);
+				switch (DetectClick(x, GameState::GetInstance()->getHeight() - y))
+				{
+				case(READY) :
+					Ready();
+					break;
+				case(UNREADY) :
+					Unready();
+					break;
+				case(RESTART) :
+					Reset();
+					break;
+				case(CLEAR) :
+					Clear();
+					break;
+				case(LOAD) :
+					//Open file menu, load Map object, take in button positions, turn off editing (maybe have option to turn it back on?)
+					break;
+				case(SAVE) :
+					//Make map object using markers,  open file menu, save
+					break;
+				case(RETURN) :
+					Return();
+					break;
+				default:
+					break;
+				}
 			}
 		}
-		else if (state == GLUT_UP)
+		else if (button == GLUT_RIGHT_BUTTON)
 		{
-			mouseHeld = false;
+			DeleteMarker(x, GameState::GetInstance()->getHeight() - y);
 		}
 	}
+	else if (state == GLUT_UP)
+	{
+		mouseHeld = false;
+	}
 }
+
 
 void Game::MouseMotionFunc(int& x, int& y)
 {
@@ -277,7 +345,9 @@ void Game::MouseMotionFunc(int& x, int& y)
 	{
 		if (mouseHeld && currMarker >= 0)
 		{
-			markers[currMarker].move(x, GameState::GetInstance()->getHeight() - y);
+			//Don't let the user move the marker into the menu/timer area
+			int newX = x > GameState::GetInstance()->getWidth() / 4 ? x : GameState::GetInstance()->getWidth() / 4;
+			markers[currMarker].move(newX, GameState::GetInstance()->getHeight() - y);
 		}
 	}
 }
@@ -311,7 +381,8 @@ void Game::KeyboardFunc(unsigned char & c, int& x, int& y)
 		break;
 	case(27) :
 		Clear();
-		GameState::GetInstance()->getGMenu()->setState(GameMenu::MENU);
+		Return();
 		break;
 	}
 }
+

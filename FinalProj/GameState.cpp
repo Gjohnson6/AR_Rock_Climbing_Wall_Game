@@ -10,7 +10,8 @@ void GameState::DisplayFunc()
 		mMenu->DisplayFunc();
 		break;
 	case(GAME) :
-		gMenu->DisplayFunc();
+		game->DisplayFunc();
+		//gMenu->DisplayFunc();
 		break;
 	case(CALIB) :
 		calib.DisplayFunc();
@@ -29,18 +30,24 @@ void GameState::MouseFunc(int & button, int & state, int & x, int & y)
 		mMenu->MouseFunc(button, state, x, y);
 		break;
 	case(GAME) :
-		gMenu->MouseFunc(button, state, x, y);
+		game->MouseFunc(button, state, x, y);
+		//gMenu->MouseFunc(button, state, x, y);
 		break;
 	case(CALIB) :
 		calib.MouseFunc(button, state, x, y);
 		break;
-
 	}
 }
 
 
 void GameState::MouseMotionFunc(int & x, int & y)
 {
+	switch (currState)
+	{
+	case(GAME) :
+		game->MouseMotionFunc(x, y);
+		//gMenu->MouseMotionFunc(x, y);
+	}
 }
 
 void GameState::KeyboardFunc(unsigned char & c, int & x, int & y)
@@ -50,7 +57,8 @@ void GameState::KeyboardFunc(unsigned char & c, int & x, int & y)
 	case(MENU) :
 		break;
 	case(GAME) :
-		gMenu->KeyboardFunc(c, x, y);
+		game->KeyboardFunc(c, x, y);
+		//gMenu->KeyboardFunc(c, x, y);
 		break;
 	case(CALIB) :
 		calib.KeyboardFunc(c, x, y);
@@ -159,8 +167,8 @@ void GameState::init()
 	cap = VideoCapture(1);
 	cap.set(CV_CAP_PROP_FRAME_WIDTH, 1920);
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 1080);
-	camWidth = cap.get(CV_CAP_PROP_FRAME_WIDTH);
-	camHeight = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+	camWidth = (int)cap.get(CV_CAP_PROP_FRAME_WIDTH);
+	camHeight = (int) cap.get(CV_CAP_PROP_FRAME_HEIGHT);
 
 	Point2f dst_vertices[4];
 	dst_vertices[0] = Point(0, 0);
@@ -171,8 +179,9 @@ void GameState::init()
 
 	camTransform = getPerspectiveTransform(dst_vertices, dst_vertices);
 	pointTransform = getPerspectiveTransform(dst_vertices, dst_vertices);
-	gMenu = new GameMenu();
+	//gMenu = new GameMenu();
 	mMenu = new MainMenu();
+	game = new Game();
 }
 
 Mat GameState::getPointTransform()
@@ -204,16 +213,16 @@ Point2f GameState::getBottomLeft()
 {
 	return bottomLeft;
 }
-
+/*
 Game GameState::getGame()
 {
 	return game;
-}
-
+}*/
+/*
 GameMenu* GameState::getGMenu()
 {
 	return gMenu;
-}
+}*/
 
 GameState::GameState()
 {
@@ -223,5 +232,6 @@ GameState::GameState()
 
 GameState::~GameState()
 {
-	delete gMenu;
+	delete game;
+	delete mMenu;
 }
