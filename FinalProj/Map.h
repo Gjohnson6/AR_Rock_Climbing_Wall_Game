@@ -9,6 +9,8 @@ using namespace std;
 class Map
 {
 public:
+	Map(vector<HitMarker> markersVec) : markers(markersVec){};
+
 	struct HighScore
 	{
 		string PlayerName;
@@ -24,16 +26,11 @@ public:
 	~Map();
 
 	vector<HitMarker> getMarkers();
-	vector<HighScore> getScores();
-
-	void AddHighScore(string name, clock_t time);
-	int AddMarker(int x, int y);
-	void MoveMarker(int index, int x, int y);
+	void SaveMap(string filename);
+	void LoadMap(string filename);
 
 private:
 	vector<HitMarker> markers;
 	vector<HighScore> highScores;
 	string name;
-	
 };
-

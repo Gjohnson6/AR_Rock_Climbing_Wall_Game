@@ -30,7 +30,8 @@ void HitMarker::Draw()
 	GLUquadric* quadric;
 	quadric = gluNewQuadric();
 	gluDisk(quadric, 0, this->radius, 50, 3);
-	if (hit)//hit animation
+	//hit animation
+	if (hit)
 	{
 		glColor3d(0., 1., 0.);
 		if (this->radius < 60 && !dec)
@@ -61,7 +62,6 @@ void HitMarker::Draw()
 	glScaled(.2, .2, .2);
 	glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char *)to_string(num).c_str());
 	gluDeleteQuadric(quadric);
-
 
 	glPopMatrix();
 }

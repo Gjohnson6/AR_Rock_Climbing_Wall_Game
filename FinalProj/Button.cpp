@@ -38,3 +38,8 @@ void Button::Draw()
 	glutStrokeString(GLUT_STROKE_ROMAN, (const unsigned char *)name.c_str());
 	glPopMatrix();
 }
+
+string Button::GetName()
+{
+	return name;
+}

@@ -1,11 +1,12 @@
 #include "Map.h"
 #include <algorithm>
 #include <functional>
+#include "pugixml.hpp"
 
 Map::Map()
 {
-}
 
+}
 
 Map::~Map()
 {
@@ -13,36 +14,59 @@ Map::~Map()
 
 vector<HitMarker> Map::getMarkers()
 {
-	return this->markers;
+	return markers;
 }
 
-vector<Map::HighScore> Map::getScores()
-{
-	return highScores;
-}
+void Map::SaveMap(string filename)
+{	
+	pugi::xml_document doc;
 
-void Map::AddHighScore(string name, clock_t time)
-{
-	HighScore newScore;
-	newScore.PlayerName = name;
-	newScore.PlayerTime = time;
-	highScores.push_back(newScore);
-	std::sort(highScores.begin(), highScores.end(), greater<HighScore>());
-}
+	pugi::xml_node mapNode = doc.append_child("Map");
+	pugi::xml_node markersNode = mapNode.append_child("Markers");
 
-int Map::AddMarker(int x, int y)
-{
-	int retVal = -1;
-	if (markers.size() < 9)
+	for (auto marker : markers)
 	{
-		HitMarker mark = HitMarker(markers.size() + 1, x, y);
-		markers.push_back(mark);
-		retVal = mark.getNum() - 1;
+		pugi::xml_node markerNode = markersNode.append_child("Marker");
+		pugi::xml_attribute xAttr = markerNode.append_attribute("XPos");
+		pugi::xml_attribute yAttr = markerNode.append_attribute("YPos");
+
+		xAttr.set_value(marker.getX());
+		yAttr.set_value(marker.getY());
 	}
-	return retVal;
+
+	filename.append(".xml");
+	cout << filename << endl;
+	doc.save_file(filename.c_str());
 }
 
-void Map::MoveMarker(int index, int x, int y)
+void Map::LoadMap(string filename)
 {
-	markers[index].move(x, y);
+	markers.clear();
+	pugi::xml_document doc;
+
+	pugi::xml_parse_result result = doc.load_file(filename.c_str());
+
+	if (result)
+	{
+		//cout << "Loaded " << result.description() << doc.child("Map").value();
+		//cout << doc.text();
+		pugi::xml_node mapNode = doc.child("Map");
+		cout << mapNode.text() << endl;
+		pugi::xml_node markersNode = mapNode.child("Markers");
+		int count = 1;
+		for (pugi::xml_node marker : markersNode.children("Marker"))
+		{
+			int x, y;
+			x = atoi(marker.attribute("XPos").value());
+			y = atoi(marker.attribute("YPos").value());
+			cout << x << "," << y << endl;
+			HitMarker newMarker(count, x, y);
+			markers.push_back(newMarker);
+			count++;
+		}
+	}
+	else
+	{
+		cout << "Error loading " << filename << endl;
+	}
 }

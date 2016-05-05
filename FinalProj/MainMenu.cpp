@@ -1,5 +1,6 @@
 #include "MainMenu.h"
 #include "GameState.h"
+
 MainMenu::MainMenu()
 {
 	addButton(PLAY, "Play");

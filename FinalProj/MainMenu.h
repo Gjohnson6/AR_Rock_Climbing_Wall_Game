@@ -15,8 +15,5 @@ private:
 		CALIB,
 		EXIT
 	};
-
 	typedef Menu super;
-
 };
-

@@ -1,5 +1,9 @@
 #include "Game.h"
 #include "GameState.h"
+#include <windows.h>
+#include <string>
+#include <experimental\filesystem>
+
 Game::Game()
 {
 	addButton(RETURN, "Return");
@@ -8,6 +12,15 @@ Game::Game()
 	addButton(CLEAR, "Clear");
 	addButton(RESTART, "Restart");
 	addButton(READY, "Ready");
+	int rightSideWidth = GameState::GetInstance()->getWidth() * .75f;
+
+	left = GameState::GetInstance()->getWidth() * .75f * .25f + GameState::GetInstance()->getWidth() * .25f;
+	right = GameState::GetInstance()->getWidth() * .75f * .75f + GameState::GetInstance()->getWidth() * .25f;
+	top = GameState::GetInstance()->getHeight() / 2 + 20;
+	bottom = top - 40;
+	width = right - left;
+
+	filename = ".\\maps\\";
 }
 
 Game::~Game()
@@ -26,13 +39,12 @@ int Game::AddMarker(int x, int y)
 	return retVal;
 }
 
-
 void Game::DetectHit(Mat thresholdImage)
 {
 	if (currToHit < markers.size() && gameStarted)
 	{
-		Scalar colour = thresholdImage.at<uchar>(Point(markersRealPos[currToHit].x, thresholdImage.size().height - markersRealPos[currToHit].y));
-		if (colour.val[0] == 255)
+		Scalar color = thresholdImage.at<uchar>(Point(markersRealPos[currToHit].x, thresholdImage.size().height - markersRealPos[currToHit].y));
+		if (color.val[0] > 0)
 		{
 			if (currToHit == 0)
 			{
@@ -78,12 +90,24 @@ void Game::DisplayTimer()
 	}
 
 	stringstream strTime;
-	strTime << setprecision(2) << to_string((float)currTime / CLOCKS_PER_SEC) << "   " << markers.size();
+	strTime.precision(2);
+	//strTime << setfill('0') << setw(2) << to_string((float)currTime / CLOCKS_PER_SEC);
+	strTime << setprecision(2) << fixed;
+	strTime << (float)currTime / CLOCKS_PER_SEC;
 	//string strTime = to_string((float)currTime / CLOCKS_PER_SEC);
 	//glutStrokeString(GLUT_ _MONO_ROMAN, (const unsigned char *)strTime.str().c_str());
-	glRasterPos2i(GameState::GetInstance()->getWidth() / 8 , GameState::GetInstance()->getHeight() / 2);
-	glScaled(30, 30, 30);
-	glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char *)strTime.str().c_str());
+	glTranslated(GameState::GetInstance()->getWidth() / 8 , GameState::GetInstance()->getHeight() / 2, 0);
+	glScaled(.5, .5, .5);
+	string s = strTime.str();
+
+	//shiftDist is how the decimal point stays in the middle.
+	//It takes the width of the characters (they're fixed width, so it's the same for all characters), multiples it by how many are to the left of the decimal (s.length - 3)
+	int shiftDist = -1 * glutStrokeWidth(GLUT_STROKE_MONO_ROMAN, '0') * (s.length() - 3);
+	//Then translate that many pixels left
+	glTranslated(shiftDist, 0, 0);
+	
+	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char *)strTime.str().c_str());
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char*)s.c_str());
 	glPopMatrix();
 }
 
@@ -119,18 +143,197 @@ void Game::Unready()
 	addButton(READY, "Ready");
 }
 
+void Game::Save()
+{
+	Unready();
+	displayState = DISP_SAVE;
+}
+
+void Game::Load()
+{
+	lMenu.Clear();
+	vector<string> names;
+
+	int i = 0;
+	int count = 0;
+	int maxButtonCount = (GameState::GetInstance()->getHeight() - 20) / 60;
+	for (auto file : experimental::filesystem::directory_iterator(".\\maps\\"))
+	{
+		count++;
+		stringstream s;
+		s << file;
+		cout << file << endl;
+		lMenu.addButton(count % maxButtonCount, s.str());
+		s.clear();
+	}
+
+	displayState = DISP_LOAD;
+}
+
+void Game::SaveKeyboardFunc(char c)
+{
+	Map map(markers);
+	switch (c)
+	{
+	case('\b') :
+		//>7 to keep "./maps/"intact
+		if (filename.length() > 7)
+		{
+			filename.pop_back();
+			//dispFilename.pop_back();
+		}
+		break;
+	case('\r') :
+		//Save the file
+		map.SaveMap(filename);
+	case(27) :
+		filename = "/maps/";
+		displayState = DISP_GAME;
+		edit = true;
+		break;
+	default:
+		filename.push_back(c);
+		//dispFilename.push_back(c);
+		break;
+	}
+}
+
+void Game::GameKeyboardFunc(char c)
+{
+
+	switch (c)
+	{
+	case('d') :
+		debugMode = !debugMode;
+		debugState = NORM;
+		break;
+	case('r') :
+		Reset();
+		break;
+	case('t') :
+		debugState = THRESH;
+		break;
+	case('f') :
+		debugState = DIFF;
+		break;
+	case('p') :
+		debugState = POINT;
+		break;
+	case('e') :
+		edit = !edit;
+		break;
+	case('s') :
+		convertMarkersToRealPos();
+		gameStarted = true;
+		break;
+	case(27) :
+		Clear();
+		Return();
+		break;
+	}
+}
+
+void Game::GameMouseFunc(int& button, int & x, int & y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+			{
+				//If the mouse is in the marker area check if we're trying to create a new marker or move a marker
+				//Also, check if the map is allowed to be edited
+				if (x > GameState::GetInstance()->getWidth() / 4 && edit)
+				{
+					bool dragging = false;
+					for (auto mark : markers)
+					{
+						if (mark.DetectMouse(x, GameState::GetInstance()->getHeight() - y))
+						{
+							currMarker = mark.getNum() - 1;
+							dragging = true;
+						}
+					}
+
+					if (!dragging && x > GameState::GetInstance()->getWidth() / 4)
+					{
+						currMarker = AddMarker(x, GameState::GetInstance()->getHeight() - y);
+					}
+
+					mouseHeld = true;
+				}
+				//Otherwise it's in the menu area, so we need to check if it's clicking on any of the buttons
+				else
+				{
+					switch (DetectClick(x, GameState::GetInstance()->getHeight() - y))
+					{
+					case(READY) :
+						Ready();
+						break;
+					case(UNREADY) :
+						Unready();
+						break;
+					case(RESTART) :
+						Reset();
+						break;
+					case(CLEAR) :
+						Clear();
+						break;
+					case(LOAD) :
+						//Open file menu, load Map object, take in button positions, turn off editing (maybe have option to turn it back on?)
+						Load();
+						break;
+					case(SAVE) :
+						//Make map object using markers,  open file menu, save
+						Save();
+						break;
+					case(RETURN) :
+						Return();
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			else if (button == GLUT_RIGHT_BUTTON)
+			{
+				DeleteMarker(x, GameState::GetInstance()->getHeight() - y);
+			}
+}
+
+void Game::LoadMouseFunc(int& button, int & x, int & y)
+{
+	if (button == GLUT_LEFT_BUTTON)
+	{
+		string file;
+		if (( file = lMenu.detectClickReturnString(x, GameState::GetInstance()->getHeight() - y)) != "" && file != "Previous Page" && file != "Next Page")
+		{
+			cout << file << endl;
+			Map loadMap;
+			loadMap.LoadMap(file);
+			markers.clear();
+
+			markers = loadMap.getMarkers();
+			displayState = DISP_GAME;
+		}
+		else if (file == "Previous Page")
+		{
+			lMenu.PageLeft();
+		}
+		else if (file == "Next Page")
+		{
+			lMenu.PageRight();
+		}
+	}
+}
+
 //This converts the onscreen positions of the markers to the position they will be in the camera's eye
 void Game::convertMarkersToRealPos()
 {
 	markersRealPos.clear();
 
-	cout << "OLD VALUES: " << endl;
 	for (auto marker : markers)
 	{
 		Point2i point(marker.getX(), marker.getY());
 		markersRealPos.push_back(point);
-		cout << point.x << "," << point.y << endl;
 	}
+
 	try
 	{
 		for (int i = 0; i < markersRealPos.size(); i++)
@@ -157,7 +360,6 @@ void Game::convertMarkersToRealPos()
 		cout << e.msg << endl;
 	}
 
-	cout << "NEW VALUES: " << endl;
 	for (auto point : markersRealPos)
 	{
 		cout << point.x << "," << point.y << endl;
@@ -252,13 +454,69 @@ void Game::DisplayFunc()
 
 	}
 
-	//Check if the current point has been hit
-	DetectHit(thresholdImage);
-
-	//Draw them arkers, this is done after the debugMode block so that the camera's view is displayed behind the markers.
-	for (int i = 0; i < markers.size(); i++)
+	switch (displayState)
 	{
-		markers[i].Draw();
+		case(DISP_GAME):	
+			//Check if the current point has been hit
+			DetectHit(differenceImage);
+
+			//Draw them arkers, this is done after the debugMode block so that the camera's view is displayed behind the markers.
+			for (int i = 0; i < markers.size(); i++)
+			{
+				markers[i].Draw();
+			}
+			break;
+		case(DISP_LOAD) :
+			lMenu.DisplayFunc();
+			break;
+		case(DISP_SAVE) :
+			glPushMatrix();
+			int rightSideWidth = GameState::GetInstance()->getWidth() * .75f;
+			int midPos = rightSideWidth / 2 + GameState::GetInstance()->getWidth() / 4;
+
+			glTranslated(midPos, GameState::GetInstance()->getHeight() / 2 + 80, 0);
+			glScaled(.5, .5, .5);
+			string s = "Enter in a filename";
+			int shiftDist = -1 * (glutStrokeWidth(GLUT_STROKE_MONO_ROMAN, '0') * (s.length() / 2 + .5)) ;
+			//Then translate that many pixels left
+			glTranslated(shiftDist, 0, 0);
+
+			//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char *)strTime.str().c_str());
+			glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char*)s.c_str());
+
+			glPopMatrix();
+
+			glPushMatrix();
+
+			glColor3d(1.0, 1.0, 1.0);
+			glBegin(GL_LINES);
+			glVertex2i(left, bottom);
+			glVertex2i(right, bottom);
+
+			glVertex2i(right, bottom);
+			glVertex2i(right, top);
+
+			glVertex2i(right, top);
+			glVertex2i(left, top);
+
+			glVertex2i(left, top);
+			glVertex2i(left, bottom);
+			
+			glEnd();
+			glTranslatef((float)left, (float)bottom + 4.f, 0.f);
+			glScaled(.2, .2, .2);
+			string dispFilename = filename.substr(7, filename.length() - 1);
+			int w = glutStrokeWidth(GLUT_STROKE_MONO_ROMAN, '0') * .2;
+			if (dispFilename.length() * w > width)
+			{
+				dispFilename = filename.substr(filename.length() - width / w, filename.length() - 1);
+			}
+			glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char *)dispFilename.c_str());
+
+			glPopMatrix();
+
+
+			break;
 	}
 
 	for (auto button : buttons)
@@ -273,63 +531,14 @@ void Game::MouseFunc(int& button, int& state, int& x, int& y)
 {
 	if (state == GLUT_DOWN)
 	{
-		if (button == GLUT_LEFT_BUTTON)
+		switch (displayState)
 		{
-			//If the mouse is in the marker area check if we're trying to create a new marker or move a marker
-			//Also, check if the map is allowed to be edited
-			if (x > GameState::GetInstance()->getWidth() / 4 && edit)
-			{
-				bool dragging = false;
-				for (auto mark : markers)
-				{
-					if (mark.DetectMouse(x, GameState::GetInstance()->getHeight() - y))
-					{
-						currMarker = mark.getNum() - 1;
-						dragging = true;
-					}
-				}
-
-				if (!dragging && x > GameState::GetInstance()->getWidth() / 4)
-				{
-					currMarker = AddMarker(x, GameState::GetInstance()->getHeight() - y);
-				}
-
-				mouseHeld = true;
-			}
-			//Otherwise it's in the menu area, so we need to check if it's clicking on any of the buttons
-			else
-			{
-				switch (DetectClick(x, GameState::GetInstance()->getHeight() - y))
-				{
-				case(READY) :
-					Ready();
-					break;
-				case(UNREADY) :
-					Unready();
-					break;
-				case(RESTART) :
-					Reset();
-					break;
-				case(CLEAR) :
-					Clear();
-					break;
-				case(LOAD) :
-					//Open file menu, load Map object, take in button positions, turn off editing (maybe have option to turn it back on?)
-					break;
-				case(SAVE) :
-					//Make map object using markers,  open file menu, save
-					break;
-				case(RETURN) :
-					Return();
-					break;
-				default:
-					break;
-				}
-			}
-		}
-		else if (button == GLUT_RIGHT_BUTTON)
-		{
-			DeleteMarker(x, GameState::GetInstance()->getHeight() - y);
+		case(DISP_GAME) :
+			GameMouseFunc(button, x, y);
+			break;
+		case(DISP_LOAD) :
+			LoadMouseFunc(button, x, y);
+			break;
 		}
 	}
 	else if (state == GLUT_UP)
@@ -337,7 +546,6 @@ void Game::MouseFunc(int& button, int& state, int& x, int& y)
 		mouseHeld = false;
 	}
 }
-
 
 void Game::MouseMotionFunc(int& x, int& y)
 {
@@ -354,35 +562,13 @@ void Game::MouseMotionFunc(int& x, int& y)
 
 void Game::KeyboardFunc(unsigned char & c, int& x, int& y)
 {
-	switch (c)
+	switch (displayState)
 	{
-	case('d') :
-		debugMode = !debugMode;
-		debugState = NORM;
+	case(DISP_GAME) :
+		GameKeyboardFunc(c);
 		break;
-	case('r') :
-		Reset();
-		break;
-	case('t') :
-		debugState = THRESH;
-		break;
-	case('f') :
-		debugState = DIFF;
-		break;
-	case('p') :
-		debugState = POINT;
-		break;
-	case('e') :
-		edit = !edit;
-		break;
-	case('s') :
-		convertMarkersToRealPos();
-		gameStarted = true;
-		break;
-	case(27) :
-		Clear();
-		Return();
+	case(DISP_SAVE) :
+		SaveKeyboardFunc(c);
 		break;
 	}
 }
-

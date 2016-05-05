@@ -6,68 +6,14 @@ using namespace glm;
 using namespace cv;
 
 GameState* GameState::instance = 0;
-//Game window;
-int currMarker;
-int currToHit = 0;
-bool debugMode = false;
-bool mouseHeld = false;
-const static int SENSITIVITY_VALUE = 20;
-
-
-MainMenu menu;
-
-const static int BLUR_SIZE = 30;
-
-void ReshapeFunc(int width, int height)
-{
-	//window.width = width;
-	//window.height = height;
-}
 
 void MouseFunc(int button, int state, int x, int y)
 {
 	GameState::GetInstance()->MouseFunc(button, state, x, y);
-	/*
-	if (state == GLUT_DOWN)
-	{
-		if (button == GLUT_LEFT_BUTTON)
-		{
-			cameraCal.addBorderPoint(x, y);
-			bool dragging = false;
-			for (auto mark : window.markers)
-			{
-				if (mark.DetectMouse(x, window.height - y))
-				{
-					currMarker = mark.getNum() - 1;
-					dragging = true;
-				}
-			}
-			if (!dragging)
-			{
-				currMarker = window.AddMarker(x, window.height - y);
-			}
-			mouseHeld = true;
-		}
-		else if (button == GLUT_RIGHT_BUTTON)
-		{
-			window.DeleteMarker(x, window.height - y);
-		}
-	}
-	else if (state == GLUT_UP)
-	{
-		mouseHeld = false;
-	}
-
-	menu.DetectClick(x, window.height - y);
-	*/
 }
 
 void MouseMotionFunc(int x, int y)
 {
-	/*if (mouseHeld && currMarker >= 0)
-	{
-		window.markers[currMarker].move(x, window.height - y);
-	}*/
 	GameState::GetInstance()->MouseMotionFunc(x, y);
 }
 
@@ -109,19 +55,17 @@ int main(int argc, char * argv[])
 	GameState::GetInstance()->init();
 
 	//This is a fullscreen application, so we set the width and height to the size of the screen.
-
-	//window.DisplayFunc = GameDisplayFunc;
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(GameState::GetInstance()->getWidth(), GameState::GetInstance()->getHeight());
-	GameState::GetInstance()->setHandle(glutCreateWindow("Name"));
-	glutReshapeFunc(ReshapeFunc);
+	GameState::GetInstance()->setHandle(glutCreateWindow("Game"));
 	glutDisplayFunc(GameDisplayFunc);
-	//glutDisplayFunc(MenuDisplayFunc);
 	glutMouseFunc(MouseFunc);
 	glutKeyboardFunc(KeyboardFunc);
 	glutTimerFunc(1000 / 30, TimerFunc, 1000 / 30 );
 	glutMotionFunc(MouseMotionFunc);
 	glutFullScreen();
+	glLineWidth(2.15);
+	glEnable(GL_LINE_SMOOTH);
 	glutMainLoop();
 }

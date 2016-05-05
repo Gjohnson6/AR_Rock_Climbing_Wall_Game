@@ -150,31 +150,33 @@
   <ItemGroup>
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CameraCalibration.cpp" />
-    <ClCompile Include="ExitButton.cpp" />
-    <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="GamePlayMenu.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="HitMarker.cpp" />
-    <ClCompile Include="InGameMenu.cpp" />
+    <ClCompile Include="RightSideMenu.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="pugixml.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Button.h" />
     <ClInclude Include="CameraCalibration.h" />
-    <ClInclude Include="ExitButton.h" />
-    <ClInclude Include="GameMenu.h" />
     <ClInclude Include="GamePlayMenu.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="HitMarker.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="InGameMenu.h" />
+    <ClInclude Include="RightSideMenu.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="pugiconfig.hpp" />
+    <ClInclude Include="pugixml.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -11,6 +11,8 @@
 #include <time.h>
 #include <iomanip>
 #include "GamePlayMenu.h"
+#include "RightSideMenu.h"
+#include <string>
 
 using namespace std;
 using namespace cv;
@@ -34,9 +36,6 @@ public:
 	void DisplayTimer();
 	void SetMap(Map map);
 
-	GLuint handle;
-	int width;
-	int height;
 	vector<HitMarker> markers;
 
 
@@ -48,7 +47,6 @@ private:
 	//Transformations take a really long time (50ms+), which is unnaceptable for an interactive game.
 	//By doing the transformations once at the beginning the limiting factor becomes the speed of the camera
 	//as these points can be compared directly the camera without transformations (after differencing, and thresholding)
-	//Basically, they're really important
 	vector<Point2f> markersRealPos;
 
 	void convertMarkersToRealPos();
@@ -56,6 +54,14 @@ private:
 	void Clear();
 	void Ready();
 	void Unready();
+	void Save();
+	void Load();
+
+	void SaveKeyboardFunc(char c);
+	void GameKeyboardFunc(char c);
+
+	void GameMouseFunc(int& button, int& x, int& y);
+	void LoadMouseFunc(int& button, int& x, int& y);
 
 	int currToHit = 0;//Index of the current hittable hitmarker in the vector. This is used to make sure markers can't be hit out of order
 	int currMarker = -1;//Used for moving markers
@@ -73,6 +79,13 @@ private:
 	const static int BLUR_SIZE = 30;
 
 	bool calibrated = false;
+
+	enum displayState
+	{
+		DISP_GAME,
+		DISP_SAVE,
+		DISP_LOAD
+	};
 
 	enum debugState
 	{
@@ -93,11 +106,19 @@ private:
 		RETURN
 	};
 	unsigned short debugState = NORM;
+	unsigned short displayState = DISP_GAME;
+
 	bool flip = false;
 	bool thresh = false;
 	bool diff = false;
 	bool edit = true;//Whether or not the map is editable
 
 	bool gameStarted = false;
-};
 
+	//Variables for the save file textbox (this should be it's own class)
+	int left, right, top, bottom, width;
+	string filename;
+
+	//Vector of buttons to be displayed when loading
+	RightSideMenu lMenu;
+};

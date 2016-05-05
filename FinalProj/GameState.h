@@ -4,7 +4,6 @@
 #include "glm\glm.hpp"
 #include "Game.h"
 #include "MainMenu.h"
-#include "GameMenu.h"
 #include "CameraCalibration.h"
 #include <iostream>
 
@@ -47,8 +46,6 @@ public:
 	float getScale();
 	void setBottomLeft(Point2f p);
 	Point2f getBottomLeft();
-	//Game getGame();
-	//GameMenu* getGMenu();
 
 	enum GAMESTATE
 	{
@@ -75,13 +72,10 @@ private:
 	CameraCalibration calib;
 	Game* game = nullptr;
 	MainMenu* mMenu = nullptr;
-	//GameMenu* gMenu = nullptr;
 
 	VideoCapture cap;
 	Mat pointTransform;
 	Mat camTransform;
 
 	GLuint winHandle;
-
 };
-

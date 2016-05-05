@@ -24,6 +24,7 @@ public:
 	int DetectClick(int x, int y);
 
 	void Draw();
+	string GetName();
 private:
 	
 	//The boundaries of the button. The bottom right corner is at (bottom, right, 0) for instance

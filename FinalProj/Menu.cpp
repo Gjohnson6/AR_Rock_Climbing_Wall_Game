@@ -11,8 +11,6 @@ Menu::~Menu()
 
 void Menu::DisplayFunc()
 {
-	//glRasterPos2i(0, 0);
-	//glDrawPixels(bg.size().width, bg.size().height, GL_RGB, GL_UNSIGNED_BYTE, bg.ptr());
 	for (auto button : buttons)
 	{
 		button.Draw();

@@ -1,8 +1,6 @@
 #include "GamePlayMenu.h"
 #include "GameState.h"
 
-
-
 void GamePlayMenu::addButton(int menuNum, string name)
 {	
 	//The left and right bounds will be easy to figure out because all the buttons are the same width.
@@ -19,7 +17,7 @@ void GamePlayMenu::addButton(int menuNum, string name)
 	int shift = 60 * buttons.size();
 	top += shift;
 	bottom += shift;
-
+	
 	buttons.push_back(Button(left, right, top, bottom, menuNum, name));
 }
 

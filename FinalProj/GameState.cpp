@@ -213,16 +213,6 @@ Point2f GameState::getBottomLeft()
 {
 	return bottomLeft;
 }
-/*
-Game GameState::getGame()
-{
-	return game;
-}*/
-/*
-GameMenu* GameState::getGMenu()
-{
-	return gMenu;
-}*/
 
 GameState::GameState()
 {

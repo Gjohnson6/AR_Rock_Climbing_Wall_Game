@@ -5,7 +5,7 @@
 
 using namespace std;
 
-//This class handles 
+//This class handles drawing menus and detecting clicks
 class Menu
 {
 public:
@@ -18,4 +18,3 @@ protected:
 	vector<Button> buttons;
 	void addButton(int menuNum, string name);
 };
-

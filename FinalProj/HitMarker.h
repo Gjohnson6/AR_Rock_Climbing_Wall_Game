@@ -32,4 +32,3 @@ private:
 	bool hit = false;
 	double r = 1.0, g = 1.0, b = 1.0;
 };
-
