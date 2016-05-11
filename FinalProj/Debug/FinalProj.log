@@ -1,69 +1,43 @@
-﻿  CameraCalibration.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\cameracalibration.cpp(90): warning C4305: 'argument': truncation from 'int' to 'bool'
-  Generating Code...
-  Compiling...
-  main.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\main.cpp(79): warning C4305: 'argument': truncation from 'double' to 'GLfloat'
-  RightSideMenu.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-  Menu.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\menu.cpp(25): warning C4018: '<': signed/unsigned mismatch
-  MainMenu.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-  HitMarker.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-  GameState.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-  GamePlayMenu.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-  Game.cpp
-c:\opencv 3.1\opencv\build\include\opencv2\core\mat.hpp(1965): warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\persistence.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\opencv 3.1\opencv\build\include\opencv2\core\utility.hpp : warning C4819: The file contains a character that cannot be represented in the current code page (932). Save the file in Unicode format to prevent data loss
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(46): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(48): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(72): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(341): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(346): warning C4305: 'argument': truncation from 'int' to 'bool'
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(355): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(382): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(387): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(441): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(466): warning C4018: '<': signed/unsigned mismatch
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(476): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(482): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(511): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(512): warning C4018: '>': signed/unsigned mismatch
-  Generating Code...
-  FinalProj.vcxproj -> C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe
+﻿Build started 5/10/2016 8:43:40 PM.
+     1>Project "C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\FinalProj\FinalProj.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Opencv 3.1\opencv\build\include" /IC:\Users\Grant\Documents\freeglut\include /IC:\Users\Grant\Documents\glew\include /IC:\Users\Grant\Documents\glm /I"C:\OpenCV 3.1\build\x86\vc14\bin\Debug\..\..\include" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Game.cpp
+         Game.cpp
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(15): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(17): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(47): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(73): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(353): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(358): warning C4305: 'argument': truncation from 'int' to 'bool'
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(366): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(393): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(398): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(415): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(417): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(418): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(453): warning C4244: 'argument': conversion from 'float' to 'GLint', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(478): warning C4018: '<': signed/unsigned mismatch
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(488): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(494): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(523): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+     1>c:\users\grant\documents\visual studio 2015\projects\finalproj\finalproj\game.cpp(524): warning C4018: '>': signed/unsigned mismatch
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe" /INCREMENTAL /NOLOGO /LIBPATH:C:\Users\Grant\Documents\glew\lib\Release\Win32 /LIBPATH:C:\Users\Grant\Documents\freeglut\lib /LIBPATH:"C:\Opencv 3.1\opencv\build\x86\vc14\lib\Debug" freeglut.lib glew32.lib opencv_core310d.lib opencv_highgui310d.lib opencv_imgproc310d.lib opencv_imgcodecs310d.lib opencv_video310d.lib opencv_videoio310d.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.lib" /MACHINE:X86 Debug\Button.obj
+         Debug\CameraCalibration.obj
+         Debug\GamePlayMenu.obj
+         Debug\GameState.obj
+         Debug\HitMarker.obj
+         Debug\RightSideMenu.obj
+         Debug\main.obj
+         Debug\Game.obj
+         Debug\MainMenu.obj
+         Debug\Map.obj
+         Debug\Menu.obj
+         Debug\pugixml.obj
+         FinalProj.vcxproj -> C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\Debug\FinalProj.exe
+     1>Done Building Project "C:\Users\Grant\Documents\Visual Studio 2015\Projects\FinalProj\FinalProj\FinalProj.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.77

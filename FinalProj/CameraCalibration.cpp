@@ -25,6 +25,22 @@ void CameraCalibration::DisplayFunc()
 	glRasterPos2i(0, 0);
 	glDrawPixels(image.size().width, image.size().height, GL_BGR_EXT, GL_UNSIGNED_BYTE, image.ptr());
 
+	int left = 0, bottom = 0, right = GameState::GetInstance()->getWidth(), top = GameState::GetInstance()->getHeight();
+	glColor3d(1.0, 1.0, 1.0);
+	glBegin(GL_LINES);
+	glVertex2i(left, bottom);
+	glVertex2i(right, bottom);
+
+	glVertex2i(right, bottom);
+	glVertex2i(right, top);
+
+	glVertex2i(right, top);
+	glVertex2i(left, top);
+
+	glVertex2i(left, top);
+	glVertex2i(left, bottom);
+
+	glEnd();
 }
 
 void CameraCalibration::MouseFunc(int & button, int& state, int& x, int& y)
@@ -77,7 +93,7 @@ void CameraCalibration::TransformImage()
 	Point2f frame_vertices[4];
 	frame_vertices[0] = Point(0, 0);
 	frame_vertices[1] = Point(GameState::GetInstance()->getWidth(), 0);
-	frame_vertices[2] = Point(GameState::GetInstance()->getWidth(), GameState::GetInstance()->getHeight());
+	frame_vertices[2] = Point(GameState::GetInstance()->getWidth(), GameState::GetInstance()->getHeight() - 1);
 	frame_vertices[3] = Point(0, GameState::GetInstance()->getHeight());
 
 	Mat pointTransform = getPerspectiveTransform(frame_vertices, point_vertices);

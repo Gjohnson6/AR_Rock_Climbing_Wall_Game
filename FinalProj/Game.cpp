@@ -91,11 +91,8 @@ void Game::DisplayTimer()
 
 	stringstream strTime;
 	strTime.precision(2);
-	//strTime << setfill('0') << setw(2) << to_string((float)currTime / CLOCKS_PER_SEC);
 	strTime << setprecision(2) << fixed;
 	strTime << (float)currTime / CLOCKS_PER_SEC;
-	//string strTime = to_string((float)currTime / CLOCKS_PER_SEC);
-	//glutStrokeString(GLUT_ _MONO_ROMAN, (const unsigned char *)strTime.str().c_str());
 	glTranslated(GameState::GetInstance()->getWidth() / 8 , GameState::GetInstance()->getHeight() / 2, 0);
 	glScaled(.5, .5, .5);
 	string s = strTime.str();
@@ -106,7 +103,6 @@ void Game::DisplayTimer()
 	//Then translate that many pixels left
 	glTranslated(shiftDist, 0, 0);
 	
-	//glutBitmapString(GLUT_BITMAP_TIMES_ROMAN_24, (const unsigned char *)strTime.str().c_str());
 	glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char*)s.c_str());
 	glPopMatrix();
 }
@@ -180,14 +176,13 @@ void Game::SaveKeyboardFunc(char c)
 		if (filename.length() > 7)
 		{
 			filename.pop_back();
-			//dispFilename.pop_back();
 		}
 		break;
 	case('\r') :
 		//Save the file
 		map.SaveMap(filename);
 	case(27) :
-		filename = "/maps/";
+		filename = ".\\maps\\";
 		displayState = DISP_GAME;
 		edit = true;
 		break;
@@ -320,6 +315,11 @@ void Game::LoadMouseFunc(int& button, int & x, int & y)
 		{
 			lMenu.PageRight();
 		}
+
+		if (DetectClick(x, GameState::GetInstance()->getHeight() - y) == RETURN)
+		{
+			displayState = DISP_GAME;
+		}
 	}
 }
 
@@ -342,7 +342,6 @@ void Game::convertMarkersToRealPos()
 		}
 
 		cv::Mat dst = cv::Mat(markersRealPos, CV_32FC1);
-		//warpPerspective(cv::Mat(markersRealPos), cv::Mat(markersRealPos), GameState::GetInstance()->getTransform(), dst.size());
 		perspectiveTransform(dst, dst, GameState::GetInstance()->getPointTransform());
 
 		dst.copyTo(markersRealPos);
@@ -458,7 +457,7 @@ void Game::DisplayFunc()
 	{
 		case(DISP_GAME):	
 			//Check if the current point has been hit
-			DetectHit(differenceImage);
+			DetectHit(thresholdImage);
 
 			//Draw them arkers, this is done after the debugMode block so that the camera's view is displayed behind the markers.
 			for (int i = 0; i < markers.size(); i++)

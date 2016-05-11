@@ -75,7 +75,7 @@ private:
 	Mat currGray, prevGray;
 	Mat differenceImage;
 	Mat thresholdImage;
-	const static int SENSITIVITY_VALUE = 20;
+	int SENSITIVITY_VALUE = 25;
 	const static int BLUR_SIZE = 30;
 
 	bool calibrated = false;

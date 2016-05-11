@@ -2,6 +2,7 @@
 
 void GameState::DisplayFunc()
 {
+	cout << this->getScale() << endl;
 	prevFrame = currFrame;
 	currFrame = clock();
 	switch (currState)
@@ -11,7 +12,6 @@ void GameState::DisplayFunc()
 		break;
 	case(GAME) :
 		game->DisplayFunc();
-		//gMenu->DisplayFunc();
 		break;
 	case(CALIB) :
 		calib.DisplayFunc();
