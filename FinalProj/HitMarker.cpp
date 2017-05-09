@@ -1,6 +1,5 @@
 #include "HitMarker.h"
-
-
+#include "GameState.h"
 
 HitMarker::HitMarker(int num, int x, int y)
 {
@@ -9,7 +8,6 @@ HitMarker::HitMarker(int num, int x, int y)
 	this->y = y;
 	this->radius = 20;
 }
-
 
 HitMarker::~HitMarker()
 {
@@ -24,41 +22,46 @@ void HitMarker::move(int x, int y)
 void HitMarker::Draw()
 {	
 
-	glColor3d(1, 1, 1);
+	glColor3d(1., 1., 1.);
 	
 	glPushMatrix();
-	glTranslatef(this->x, this->y, 0);
+	glTranslatef((float) this->x, (float) this->y, 0.f);
 
 	GLUquadric* quadric;
 	quadric = gluNewQuadric();
 	gluDisk(quadric, 0, this->radius, 50, 3);
-	if (hit)//hit animation
+	//hit animation
+	if (hit)
 	{
-		glColor3d(0, 1, 0);
-		if (this->radius < 40 && !dec)
+		glColor3d(0., 1., 0.);
+		if (this->radius < 60 && !dec)
 		{
-			this->radius += 2;
-			if (this->radius >= 40)
+			this->radius += 2 * GameState::GetInstance()->getScale();
+			if (this->radius >= 60)
 			{
+				this->radius = 60;
 				dec = true;
 			}
 		}
 		else if(dec)
 		{
-			if (this->radius > 20)
+			if (this->radius > 40)
 			{
-				cout << "Lowering radius" << this->radius << endl;
-				this->radius -= 2;
+				this->radius -= 2 * GameState::GetInstance()->getScale();
 			}
-			gluDisk(quadric, this->radius, 40, 50, 3);
+			
+			if(this->radius < 40)
+			{
+				this->radius = 40;
+			}
+			gluDisk(quadric, this->radius, 60.0, 50, 3);
 		}
 	}
-	glTranslatef(-10, -10, -1);
-	glColor3d(0, 0, 0);
+	glTranslatef(-10., -10., -1.);
+	glColor3d(0., 0., 0.);
 	glScaled(.2, .2, .2);
 	glutStrokeString(GLUT_STROKE_MONO_ROMAN, (const unsigned char *)to_string(num).c_str());
 	gluDeleteQuadric(quadric);
-
 
 	glPopMatrix();
 }
@@ -97,4 +100,5 @@ void HitMarker::Reset()
 {
 	this->hit = false;
 	this->dec = false;
+	this->radius = 20;
 }
